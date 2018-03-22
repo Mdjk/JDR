@@ -17,7 +17,9 @@ import java.awt.event.ActionEvent;
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField tfPlayerLvl;
+	private InfoJeu jeu = new InfoJeu();
+	
 
 	/**
 	 * Launch the application.
@@ -39,6 +41,10 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
+
+		ConnexionDB connexion = new ConnexionDB();
+		connexion.connexion();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 450);
 		contentPane = new JPanel();
@@ -46,10 +52,10 @@ public class MainFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(107, 0, 63, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		tfPlayerLvl = new JTextField();
+		tfPlayerLvl.setBounds(107, 0, 63, 20);
+		contentPane.add(tfPlayerLvl);
+		tfPlayerLvl.setColumns(10);
 		
 		JLabel lblLvlJoueurs = new JLabel("Lvl Joueurs");
 		lblLvlJoueurs.setBounds(10, 3, 87, 14);
@@ -63,21 +69,34 @@ public class MainFrame extends JFrame {
 		lblLvlRencontre.setBounds(10, 58, 87, 14);
 		contentPane.add(lblLvlRencontre);
 		
-		JComboBox cmbBxDiceType = new JComboBox();
+		JComboBox cmbBxDiceType = new JComboBox(jeu.getDiceType());
 		cmbBxDiceType.setBounds(107, 27, 63, 20);
 		contentPane.add(cmbBxDiceType);
 		
-		JComboBox cmbBxLvlEncounter = new JComboBox();
+		JComboBox cmbBxLvlEncounter = new JComboBox(jeu.getEncounterLvl());
 		cmbBxLvlEncounter.setBounds(107, 55, 63, 20);
 		contentPane.add(cmbBxLvlEncounter);
+		
+		JButton btnValider = new JButton("Valider");
+		btnValider.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				jeu.setActualPlayersLvl(Integer.parseInt(tfPlayerLvl.getText()));
+				jeu.setActualDiceType(Integer.parseInt(cmbBxDiceType.getSelectedItem().toString()));
+				jeu.setActualEncounterLvl(Integer.parseInt(cmbBxLvlEncounter.getSelectedItem().toString()));
+			}
+		});
+		btnValider.setBounds(95, 85, 87, 23);
+		contentPane.add(btnValider);
+		
+		///////////// génération de la partie droite///////////////////
 		
 		JLabel lblRencontreSpcifique = new JLabel("Rencontre Sp\u00E9cifique");
 		lblRencontreSpcifique.setBounds(330, 4, 135, 14);
 		contentPane.add(lblRencontreSpcifique);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(460, 1, 80, 20);
-		contentPane.add(comboBox);
+		JComboBox cmbBxSpecificEncounter = new JComboBox();
+		cmbBxSpecificEncounter.setBounds(460, 1, 80, 20);
+		contentPane.add(cmbBxSpecificEncounter);
 		
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Boss ?");
 		chckbxNewCheckBox.setBounds(565, 0, 97, 23);
@@ -123,5 +142,6 @@ public class MainFrame extends JFrame {
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(0, 190, 684, 222);
 		contentPane.add(lblNewLabel);
+		
 	}
 }
